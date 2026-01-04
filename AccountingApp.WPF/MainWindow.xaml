@@ -7,7 +7,6 @@
         Title="AccountingApp" Height="600" Width="1000"
         WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen"
         Background="Transparent" FlowDirection="RightToLeft">
-
     <Window.Resources>
         <Style TargetType="Window">
             <Setter Property="Template">
@@ -58,8 +57,20 @@
     </Window.Resources>
 
     <Grid>
-        <!-- Main application content goes here -->
-        <TextBlock Text="Welcome to the Accounting App!" FontSize="24" FontWeight="Bold"
-                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TabControl Style="{StaticResource ModernTabControl}">
+            <TabItem Header="البيانات الأساسية">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="الوحدات" Style="{StaticResource PrimaryButton}" Command="{Binding NavigateToUnitsCommand}" Margin="10"/>
+                    <Button Content="العملاء" Style="{StaticResource PrimaryButton}" Command="{Binding NavigateToCustomersCommand}" Margin="10"/>
+                    <Button Content="الموظفين" Style="{StaticResource PrimaryButton}" Command="{Binding NavigateToEmployeesCommand}" Margin="10"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="العملاء والموردين"/>
+            <TabItem Header="شئون الموظفين"/>
+            <TabItem Header="مبيعات ومشتريات"/>
+            <TabItem Header="سندات"/>
+            <TabItem Header="الحسابات"/>
+            <TabItem Header="المخازن"/>
+        </TabControl>
     </Grid>
 </Window>

@@ -1,13 +1,13 @@
-<Window x:Class="AccountingApp.WPF.LoginView"
+<Window x:Class="AccountingApp.WPF.ReportView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dxp="http://schemas.devexpress.com/winfx/2008/xaml/printing"
         mc:Ignorable="d"
-        Title="Login" Height="450" Width="350"
+        Title="Report" Height="600" Width="800"
         WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen"
         Background="Transparent" FlowDirection="RightToLeft">
-
     <Window.Resources>
         <Style TargetType="Window">
             <Setter Property="Template">
@@ -22,8 +22,6 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-
-                                <!-- Title Bar -->
                                 <Border Grid.Row="0" Height="40" CornerRadius="10,10,0,0" MouseDown="TitleBar_MouseDown">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -39,7 +37,7 @@
                                                    VerticalAlignment="Center"
                                                    HorizontalAlignment="Center"/>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
-                                             <Button Content="&#xE921;" Style="{StaticResource WindowCloseButtonStyle}" Click="CloseButton_Click"/>
+                                            <Button Content="&#xE921;" Style="{StaticResource WindowCloseButtonStyle}" Click="CloseButton_Click"/>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -51,18 +49,7 @@
             </Setter>
         </Style>
     </Window.Resources>
-
     <Grid>
-        <StackPanel VerticalAlignment="Center" Margin="30">
-            <TextBlock Text="تسجيل الدخول" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
-            <TextBlock Text="اسم المستخدم" Margin="0,0,0,5"/>
-            <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="كلمة المرور" Margin="0,10,0,5"/>
-            <PasswordBox x:Name="PasswordBox" Style="{StaticResource ModernPasswordBox}" />
-            <TextBlock Text="الفرع" Margin="0,10,0,5"/>
-            <ComboBox Style="{StaticResource ModernComboBox}" ItemsSource="{Binding Branches}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedBranch}"/>
-            <Button Content="دخول" Style="{StaticResource PrimaryButton}" Margin="0,20,0,0" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-        </StackPanel>
+        <dxp:DocumentPreviewControl DocumentSource="{Binding Report}" />
     </Grid>
 </Window>

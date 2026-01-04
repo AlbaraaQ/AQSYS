@@ -3,13 +3,12 @@ using System.Windows.Input;
 
 namespace AccountingApp.WPF
 {
-    public partial class LoginView : Window
+    public partial class ReportView : Window
     {
-        public LoginView(LoginViewModel viewModel)
+        public ReportView(ReportViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
-            viewModel.RequestClose += () => this.Close();
         }
 
         private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
@@ -20,7 +19,7 @@ namespace AccountingApp.WPF
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            this.Close();
         }
     }
 }

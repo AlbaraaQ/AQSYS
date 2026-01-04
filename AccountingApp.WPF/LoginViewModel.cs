@@ -1,4 +1,6 @@
 using AccountingApp.Core;
+using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,15 +11,23 @@ namespace AccountingApp.WPF
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly INavigationService _navigationService;
+        private readonly IBranchesRepository _branchesRepository;
         private string _username;
         private string _errorMessage;
+        private Branch _selectedBranch;
 
-        public LoginViewModel(IAuthenticationService authenticationService, INavigationService navigationService)
+        public event Action RequestClose;
+
+        public LoginViewModel(IAuthenticationService authenticationService, INavigationService navigationService, IBranchesRepository branchesRepository)
         {
             _authenticationService = authenticationService;
             _navigationService = navigationService;
+            _branchesRepository = branchesRepository;
+            LoadBranches();
             LoginCommand = new RelayCommand(Login, CanLogin);
         }
+
+        public ObservableCollection<Branch> Branches { get; set; }
 
         public string Username
         {
@@ -39,11 +49,26 @@ namespace AccountingApp.WPF
             }
         }
 
+        public Branch SelectedBranch
+        {
+            get => _selectedBranch;
+            set
+            {
+                _selectedBranch = value;
+                OnPropertyChanged(nameof(SelectedBranch));
+            }
+        }
+
         public ICommand LoginCommand { get; }
+
+        private void LoadBranches()
+        {
+            Branches = new ObservableCollection<Branch>(_branchesRepository.GetAll());
+        }
 
         private bool CanLogin(object parameter)
         {
-            return !string.IsNullOrWhiteSpace(Username) && parameter is PasswordBox;
+            return !string.IsNullOrWhiteSpace(Username) && parameter is PasswordBox && SelectedBranch != null;
         }
 
         private void Login(object parameter)
@@ -54,15 +79,15 @@ namespace AccountingApp.WPF
                 return;
             }
 
-            var user = _authenticationService.Authenticate(Username, passwordBox.Password);
+            var user = _authenticationService.Authenticate(Username, passwordBox.Password, SelectedBranch.Id);
             if (user != null)
             {
                 _navigationService.NavigateTo<MainWindow>();
-                (passwordBox.Parent as Window)?.Close();
+                RequestClose?.Invoke();
             }
             else
             {
-                ErrorMessage = "Invalid username or password.";
+                ErrorMessage = "Invalid username or password for the selected branch.";
             }
         }
 

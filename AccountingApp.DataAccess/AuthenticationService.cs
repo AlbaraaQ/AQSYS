@@ -12,30 +12,41 @@ namespace AccountingApp.DataAccess
             _connectionString = connectionString;
         }
 
-        public User Authenticate(string username, string password)
+        public User Authenticate(string username, string password, int branchId)
         {
-            // CRITICAL: This is a temporary authentication mechanism for development purposes only.
-            // Passwords should NEVER be stored as plaintext. Before any production deployment,
-            // this must be replaced with a secure password hashing and verification mechanism
-            // (e.g., PBKDF2, BCrypt, or Argon2).
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                var command = new SqlCommand("SELECT * FROM Users WHERE username = @username AND pwd = @password", connection);
+                var command = new SqlCommand("SELECT * FROM Users WHERE username = @username", connection);
                 command.Parameters.AddWithValue("@username", username);
-                command.Parameters.AddWithValue("@password", password);
 
                 using (var reader = command.ExecuteReader())
                 {
                     if (reader.Read())
                     {
-                        return new User
+                        var hashedPassword = reader["pwd"] as string;
+                        if (PasswordHasher.Verify(password, hashedPassword))
                         {
-                            Id = (int)reader["id"],
-                            Username = (string)reader["username"],
-                            EmployeeId = (int)reader["emp"],
-                            BranchId = 0 // The branch is selected in the UI, so we'll need to handle this separately.
-                        };
+                            var userId = (int)reader["id"];
+                            var employeeId = (int)reader["emp"];
+
+                            // Check if the user has access to the selected branch
+                            command = new SqlCommand("SELECT COUNT(*) FROM EmpBranches WHERE emp = @employeeId AND branch = @branchId", connection);
+                            command.Parameters.AddWithValue("@employeeId", employeeId);
+                            command.Parameters.AddWithValue("@branchId", branchId);
+                            var count = (int)command.ExecuteScalar();
+
+                            if (count > 0)
+                            {
+                                return new User
+                                {
+                                    Id = userId,
+                                    Username = (string)reader["username"],
+                                    EmployeeId = employeeId,
+                                    BranchId = branchId
+                                };
+                            }
+                        }
                     }
                 }
             }
