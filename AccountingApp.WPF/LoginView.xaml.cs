@@ -1,0 +1,26 @@
+using System.Windows;
+using System.Windows.Input;
+
+namespace AccountingApp.WPF
+{
+    public partial class LoginView : Window
+    {
+        public LoginView(LoginViewModel viewModel)
+        {
+            InitializeComponent();
+            DataContext = viewModel;
+            viewModel.RequestClose += () => this.Close();
+        }
+
+        private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+    }
+}

@@ -1,0 +1,125 @@
+<Window x:Class="AccountingApp.WPF.EmployeesView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Employees" Height="600" Width="1000"
+        WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen"
+        Background="Transparent" FlowDirection="RightToLeft">
+    <Window.Resources>
+        <Style TargetType="Window">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Window">
+                        <Border CornerRadius="10" Background="#F0F2F5" BorderBrush="#CCCCCC" BorderThickness="1">
+                            <Border.Effect>
+                                <DropShadowEffect ShadowDepth="0" BlurRadius="15" Opacity="0.3" Color="#000"/>
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0" Height="40" CornerRadius="10,10,0,0" MouseDown="TitleBar_MouseDown">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#4A90E2" Offset="0"/>
+                                            <GradientStop Color="#357ABD" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Grid>
+                                        <TextBlock Text="{TemplateBinding Title}"
+                                                   Foreground="White"
+                                                   FontSize="16"
+                                                   FontWeight="Bold"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"/>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
+                                            <Button Content="&#xE921;" Style="{StaticResource WindowCloseButtonStyle}" Click="CloseButton_Click"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                                <ContentPresenter Grid.Row="1"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+                <TextBlock Text="الاسم"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="الإدارة"/>
+                <ComboBox Style="{StaticResource ModernComboBox}" ItemsSource="{Binding Managements}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedValue="{Binding SelectedEmployee.ManagementId}"/>
+                <TextBlock Text="القسم"/>
+                <ComboBox Style="{StaticResource ModernComboBox}" ItemsSource="{Binding Departments}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedValue="{Binding SelectedEmployee.DepartmentId}"/>
+                <TextBlock Text="الوظيفة"/>
+                <ComboBox Style="{StaticResource ModernComboBox}" ItemsSource="{Binding Jobs}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedValue="{Binding SelectedEmployee.JobId}"/>
+                <TextBlock Text="تاريخ الميلاد"/>
+                <DatePicker Style="{StaticResource ModernDatePicker}" SelectedDate="{Binding SelectedEmployee.BirthDate}"/>
+                <TextBlock Text="تاريخ التوظيف"/>
+                <DatePicker Style="{StaticResource ModernDatePicker}" SelectedDate="{Binding SelectedEmployee.WorkDate}"/>
+                <TextBlock Text="الجنسية"/>
+                <ComboBox Style="{StaticResource ModernComboBox}" ItemsSource="{Binding Nationalities}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedValue="{Binding SelectedEmployee.NationalityId}"/>
+                <TextBlock Text="الحالة الاجتماعية"/>
+                <ComboBox Style="{StaticResource ModernComboBox}" ItemsSource="{Binding MaritalStatuses}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedValue="{Binding SelectedEmployee.MaritalStatusId}"/>
+                <TextBlock Text="الحالة"/>
+                <ComboBox Style="{StaticResource ModernComboBox}" ItemsSource="{Binding States}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedValue="{Binding SelectedEmployee.StateId}"/>
+                <TextBlock Text="الجنس"/>
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="ذكر" IsChecked="{Binding SelectedEmployee.Sex, Converter={StaticResource StringToBoolConverter}, ConverterParameter=M}"/>
+                    <RadioButton Content="أنثى" IsChecked="{Binding SelectedEmployee.Sex, Converter={StaticResource StringToBoolConverter}, ConverterParameter=F}" Margin="10,0,0,0"/>
+                </StackPanel>
+                <TextBlock Text="الهاتف"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.Telephone, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="الجوال"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.Mobile, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="البريد الالكتروني"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.Email, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="العنوان"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.Address, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="ملاحظات"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.Notes, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="الراتب الأساسي"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.BasicSalary, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="بدل سكن"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.HouseAllowance, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="بدل مواصلات"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.TravelAllowance, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="بدل طعام"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.FoodAllowance, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="بدل طبي"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.MedicalAllowance, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="إضافي"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.AdditionalSalary, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="أخرى"/>
+                <TextBox Style="{StaticResource ModernTextBox}" Text="{Binding SelectedEmployee.OtherSalary, UpdateSourceTrigger=PropertyChanged}"/>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <Button Content="جديد" Style="{StaticResource PrimaryButton}" Command="{Binding NewCommand}"/>
+                    <Button Content="حفظ" Style="{StaticResource SuccessButton}" Command="{Binding SaveCommand}" Margin="10,0,0,0"/>
+                    <Button Content="حذف" Style="{StaticResource DangerButton}" Command="{Binding DeleteCommand}" Margin="10,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+            <DataGrid Grid.Column="1" Margin="10" Style="{StaticResource ModernDataGrid}"
+                      ItemsSource="{Binding Employees}" SelectedItem="{Binding SelectedEmployee}"
+                      ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeader}"
+                      RowStyle="{StaticResource ModernDataGridRow}"
+                      CellStyle="{StaticResource ModernDataGridCell}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="المعرف" Binding="{Binding Id}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="الاسم" Binding="{Binding Name}" IsReadOnly="True" Width="*"/>
+                    <DataGridTextColumn Header="تاريخ التوظيف" Binding="{Binding WorkDate, StringFormat=d}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="الجوال" Binding="{Binding Mobile}" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>
